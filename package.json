@@ -1,0 +1,31 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "host": "nuxt dev --host 0.0.0.0 --port 8000",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "@vue/eslint-config-typescript": "^11.0.3",
+    "eslint": "^8.48.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "nuxt": "^3.7.1",
+    "nuxt-quasar-ui": "^2.0.5",
+    "prettier": "^3.0.3",
+    "vue-eslint-parser": "^9.3.1"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.16.6",
+    "quasar": "^2.12.6",
+    "wavesurfer.js": "^7.2.2"
+  }
+}
