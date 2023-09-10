@@ -76,7 +76,6 @@ function formatTime(seconds: number) {
 .my-card {
   display: flex;
   flex-direction: column;
-  max-width: 750px;
 }
 
 @media (min-width: 600px) {
