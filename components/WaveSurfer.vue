@@ -43,19 +43,9 @@ onMounted(async () => {
 
   waveSurfer.value = WaveSurfer.create(wsOptions);
   if (props.peaksData) {
-    fetch(props.peaksData)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("HTTP error " + response.status);
-        }
-        return response.json();
-      })
-      .then((peaks) => {
-        waveSurfer.value.load(props.src, peaks.data);
-      })
-      .catch((e) => {
-        console.error("error", e);
-      });
+    loadPeaks(props.peaksData).then((peaks) => {
+      waveSurfer.value.load(props.src, peaks.data);
+    });
   } else {
     waveSurfer.value.load(props.src);
   }
@@ -96,6 +86,19 @@ onUnmounted(() => {
 defineExpose({
   waveSurfer,
 });
+
+function loadPeaks(url) {
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("HTTP error " + response.status);
+      }
+      return response.json();
+    })
+    .catch((e) => {
+      console.error("error", e);
+    });
+}
 </script>
 
 <style lang="css" scoped>
