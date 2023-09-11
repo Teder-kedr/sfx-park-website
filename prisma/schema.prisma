@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model sounds {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  duration Int
+  fileName String
+  likes    Int
+  tags     String[]
+  title    String
+  views    Int
+}
