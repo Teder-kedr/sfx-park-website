@@ -24,7 +24,7 @@
         {{ opt.text }}
       </QBtn>
     </div>
-    <SoundList :items="sortedFilteredItems" class="q-mt-md" @tag-clicked="tagsFilter = [$event]" />
+    <SoundList :items="sortedFilteredItems" class="q-mt-lg" @tag-clicked="tagsFilter = [$event]" />
   </div>
 </template>
 
