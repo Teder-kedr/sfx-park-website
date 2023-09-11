@@ -1,27 +1,7 @@
 <template>
   <div>
-    <QToolbar v-if="$q.screen.gt.xs" class="my-big-toolbar bg-dark text-white q-py-md q-px-lg justify-between">
-      <NuxtLink to="/" class="text-h6 text-white" style="text-decoration: none">
-        <em>SFX Park</em>
-      </NuxtLink>
-      <QInput
-        v-model="searchField"
-        class="q-ml-sm"
-        dark
-        outlined
-        dense
-        label="Search sounds..."
-        style="flex-grow: 1; max-width: 650px"
-      >
-        <template #append>
-          <QBtn round flat icon="search" />
-        </template>
-      </QInput>
-      <QBtn flat to="/">Log in / Register</QBtn>
-    </QToolbar>
-
     <QExpansionItem
-      v-else
+      v-if="$q.screen.xs"
       expand-icon-toggle
       class="my-small-toolbar bg-dark text-white q-py-md q-px-lg justify-between"
     >
@@ -45,6 +25,26 @@
       </QInput>
       <QBtn flat to="/">Log in / Register</QBtn>
     </QExpansionItem>
+
+    <QToolbar v-else class="my-big-toolbar bg-dark text-white q-py-md q-px-lg justify-between">
+      <NuxtLink to="/" class="text-h6 text-white" style="text-decoration: none">
+        <em>SFX Park</em>
+      </NuxtLink>
+      <QInput
+        v-model="searchField"
+        class="q-ml-sm"
+        dark
+        outlined
+        dense
+        label="Search sounds..."
+        style="flex-grow: 1; max-width: 650px"
+      >
+        <template #append>
+          <QBtn round flat icon="search" />
+        </template>
+      </QInput>
+      <QBtn flat to="/">Log in / Register</QBtn>
+    </QToolbar>
   </div>
 </template>
 

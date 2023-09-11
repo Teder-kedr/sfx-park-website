@@ -1,5 +1,5 @@
 <template>
-  <div v-if="props.items.length">
+  <ul v-if="props.items.length">
     <SoundItem
       v-for="item in props.items"
       :key="item.id"
@@ -7,7 +7,7 @@
       :is-active="activeItemId === item.id"
       @activate="handleActivate(item)"
     />
-  </div>
+  </ul>
   <p v-else class="text-center text-grey-7">No sounds</p>
 </template>
 

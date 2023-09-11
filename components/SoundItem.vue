@@ -1,35 +1,45 @@
 <template>
-  <QCard class="my-card q-pa-md q-mb-md items-start no-wrap">
-    <QBtn
-      round
-      color="grey-6"
-      class="q-mb-md"
-      :icon="playing ? 'pause' : 'play_arrow'"
-      :aria-label="playing ? 'Pause' : 'Play'"
-      @click="togglePlay"
-    />
-    <div style="width: 100%">
-      <WaveSurfer
-        v-if="isActive"
-        ref="refWaveSurfer"
-        v-model="playing"
-        :src="formatSrc(props.item.fileName)"
-        @duration="duration = $event"
-        @timeupdate="time = $event"
+  <li>
+    <QCard class="my-card q-pa-md q-mb-md items-start no-wrap">
+      <QBtn
+        round
+        color="grey-6"
+        class="q-mb-md"
+        :icon="playing ? 'pause' : 'play_arrow'"
+        :aria-label="playing ? 'Pause' : 'Play'"
+        @click="togglePlay"
       />
-      <p v-if="props.isActive" class="q-mb-none text-caption text-grey-7">
-        {{ formatTime(time) }} / {{ formatTime(duration) }}
-      </p>
-      <p class="text-subtitle1 q-mb-none">{{ props.item.title }}</p>
-      <p class="q-mb-none">
-        <span v-if="!isActive" class="text-caption text-grey-7">{{ formatTime(props.item.duration) }}</span>
-      </p>
-    </div>
-    <div class="row no-wrap items-center" style="gap: 0.5rem">
-      <QBtn round flat aria-label="Add to favorites" icon="star_outline" />
-      <QBtn round flat aria-label="Download" icon="file_download" />
-    </div>
-  </QCard>
+      <div style="width: 100%">
+        <WaveSurfer
+          v-if="isActive"
+          ref="refWaveSurfer"
+          v-model="playing"
+          :src="formatSrc(props.item.fileName)"
+          @duration="duration = $event"
+          @timeupdate="time = $event"
+        />
+        <p v-if="props.isActive" class="q-mb-none text-caption text-grey-7">
+          {{ formatTime(time) }} / {{ formatTime(duration) }}
+        </p>
+        <button class="my-title text-subtitle1 q-mb-none" @click="$emit('activate')">{{ props.item.title }}</button>
+
+        <ul v-if="props.isActive">
+          <p class="q-mb-xs">Tags:</p>
+          <li v-for="tag of props.item.tags" :key="tag" style="display: inline">
+            <QChip outline icon="label">{{ tag }}</QChip>
+          </li>
+        </ul>
+
+        <p class="q-mb-none">
+          <span v-if="!isActive" class="text-caption text-grey-7">{{ formatTime(props.item.duration) }}</span>
+        </p>
+      </div>
+      <div class="row no-wrap items-center" style="gap: 0.5rem">
+        <QBtn round flat aria-label="Add to favorites" icon="star_outline" />
+        <QBtn round flat aria-label="Download" icon="file_download" />
+      </div>
+    </QCard>
+  </li>
 </template>
 <script setup lang="ts">
 import { Sound } from "~/utils/types";
@@ -77,6 +87,17 @@ function formatSrc(fileName: string) {
 </script>
 
 <style scoped>
+.my-title {
+  text-align: left;
+  background: none;
+  border: 0;
+  outline: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.my-title:hover {
+  text-decoration: underline;
+}
 .my-card {
   display: flex;
   flex-direction: column;
