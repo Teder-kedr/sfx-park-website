@@ -6,6 +6,7 @@
       :item="item"
       :is-active="activeItemId === item.id"
       @activate="handleActivate(item)"
+      @tag-clicked="emit('tagClicked', $event)"
     />
   </ul>
   <p v-else class="text-center text-grey-7">No sounds</p>
@@ -20,6 +21,8 @@ const props = defineProps({
     type: Array<Sound>,
   },
 });
+
+const emit = defineEmits(["tagClicked"]);
 
 const activeItemId = ref("");
 
