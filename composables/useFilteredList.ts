@@ -29,5 +29,45 @@ export const useFilteredList = (items: Ref<Sound[]>) => {
     );
   });
 
-  return { tags, searchField, tagsFilter, filteredItems };
+  const SORTING_METHODS = [
+    {
+      text: "Most Viewed",
+      method: "mostviewed",
+    },
+    {
+      text: "Most Liked",
+      method: "mostliked",
+    },
+    {
+      text: "Shortest",
+      method: "lengthup",
+    },
+    {
+      text: "Longest",
+      method: "lengthdown",
+    },
+  ];
+
+  const sortBy: Ref<string> = ref("mostviewed");
+
+  const sortingFunctions = {
+    lengthup: (a: Sound, b: Sound) => {
+      if (a.duration < b.duration) return -1;
+      return 1;
+    },
+    lengthdown: (a: Sound, b: Sound) => {
+      if (a.duration > b.duration) return -1;
+      return 1;
+    },
+    mostviewed: (a: Sound, b: Sound) => b.views - a.views,
+    mostliked: (a: Sound, b: Sound) => b.likes - a.likes,
+  };
+
+  const sortedFilteredItems = computed(() => {
+    const key = sortBy.value as "lengthup" | "lengthdown" | "mostviewed" | "mostliked";
+    const result = [...filteredItems.value].sort(sortingFunctions[key]);
+    return result;
+  });
+
+  return { tags, searchField, tagsFilter, SORTING_METHODS, sortBy, sortedFilteredItems };
 };

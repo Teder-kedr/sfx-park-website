@@ -13,7 +13,18 @@
         style="min-width: 250px"
       />
     </div>
-    <SoundList :items="filteredItems" class="q-mt-lg" @tag-clicked="tagsFilter = [$event]" />
+    <p class="q-mt-md q-mb-xs text-grey-8">Sort by:</p>
+    <div class="q-gutter-sm">
+      <QBtn
+        v-for="opt of SORTING_METHODS"
+        :key="opt.method"
+        :color="sortBy === opt.method ? 'primary' : 'grey-7'"
+        @click="sortBy = opt.method"
+      >
+        {{ opt.text }}
+      </QBtn>
+    </div>
+    <SoundList :items="sortedFilteredItems" class="q-mt-md" @tag-clicked="tagsFilter = [$event]" />
   </div>
 </template>
 
@@ -24,7 +35,7 @@ const sounds: Ref<Sound[]> = ref([]);
 const { data } = await useFetch("/api/sounds");
 sounds.value = data.value as Sound[];
 
-const { tags, searchField, tagsFilter, filteredItems } = useFilteredList(sounds);
+const { tags, searchField, tagsFilter, SORTING_METHODS, sortBy, sortedFilteredItems } = useFilteredList(sounds);
 
 const route = useRoute();
 if (route.query.s) {
