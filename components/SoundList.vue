@@ -1,26 +1,29 @@
 <template>
-  <SoundItem
-    v-for="(item, idx) in items"
-    :key="item.id"
-    :item="item"
-    :is-active="activeItem === idx"
-    @activate="handleActivate(idx)"
-  />
+  <div v-if="props.items.length">
+    <SoundItem
+      v-for="item in props.items"
+      :key="item.id"
+      :item="item"
+      :is-active="activeItemId === item.id"
+      @activate="handleActivate(item)"
+    />
+  </div>
+  <p v-else class="text-center text-grey-7">No sounds</p>
 </template>
 
 <script lang="ts" setup>
 import { Sound } from "~/utils/types";
 
-const activeItem = ref(-1);
-
-function handleActivate(index: number) {
-  activeItem.value = index;
-}
-
-const items: Ref<Array<Sound>> = ref([]);
-
-onMounted(async () => {
-  const response = await fetch("/soundData.json");
-  items.value = (await response.json()) as Sound[];
+const props = defineProps({
+  items: {
+    default: [],
+    type: Array<Sound>,
+  },
 });
+
+const activeItemId = ref("");
+
+function handleActivate(item: Sound) {
+  activeItemId.value = item.id;
+}
 </script>

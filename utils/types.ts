@@ -1,7 +1,3 @@
-export type Sound = {
-  title: string;
-  url: string;
-  duration: number;
-  tags?: string[];
-  id: string;
-};
+import { sounds } from "@prisma/client";
+
+export type Sound = sounds;

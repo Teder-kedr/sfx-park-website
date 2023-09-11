@@ -13,7 +13,7 @@
         v-if="isActive"
         ref="refWaveSurfer"
         v-model="playing"
-        :src="props.item.url"
+        :src="formatSrc(props.item.fileName)"
         @duration="duration = $event"
         @timeupdate="time = $event"
       />
@@ -69,6 +69,10 @@ function formatTime(seconds: number) {
   const remainingSeconds = seconds % 60;
 
   return `${minutes}:${String(remainingSeconds).padStart(2, "0")}`;
+}
+
+function formatSrc(fileName: string) {
+  return `/sounds/mp3/${fileName}.mp3`;
 }
 </script>
 
