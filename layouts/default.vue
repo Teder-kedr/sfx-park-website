@@ -45,8 +45,9 @@
 const searchField = ref("");
 
 function handleSearchSubmit() {
+  if (searchField.value.trim() === "") return;
   const router = useRouter();
-  router.push(`/sounds?s=${searchField.value.toLowerCase()}`);
+  router.push({ path: "/sounds", query: { s: searchField.value } });
   searchField.value = "";
 }
 </script>

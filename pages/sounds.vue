@@ -11,6 +11,7 @@
         style="min-width: 250px"
       />
       <QSelect
+        ref="selectRef"
         v-model="tagsFilter"
         class="col"
         clearable
@@ -38,6 +39,7 @@ const tagsFilterString = computed(() => {
   if (!tagsFilter.value?.length) return undefined;
   return tagsFilter.value.join("|");
 });
+const selectRef: Ref<HTMLElement | null> = ref(null);
 
 // fetching data
 const { pending: tagsArePending, data: tagsOptions } = await useLazyFetch("/api/tags");
@@ -60,6 +62,11 @@ if (routeQueries.t) {
 }
 watch([searchField, tagsFilterString], (newValues) => {
   useRouter().push({ query: { s: newValues[0] || undefined, t: newValues[1] } });
+});
+
+// blurring select menu when the filter changes
+watch(tagsFilter, () => {
+  selectRef.value?.blur();
 });
 
 // setting layout
