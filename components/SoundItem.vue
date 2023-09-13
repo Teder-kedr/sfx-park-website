@@ -26,7 +26,7 @@
         <ul v-if="props.isActive">
           <p class="q-mb-xs">Tags:</p>
           <li v-for="tag of props.item.tags" :key="tag" style="display: inline">
-            <QChip outline icon="label" clickable>{{ tag }}</QChip>
+            <QChip outline icon="label" clickable @click="handleTagClick(tag)">{{ tag }}</QChip>
           </li>
         </ul>
 
@@ -72,6 +72,16 @@ const time = ref(0);
 function togglePlay() {
   emit("activate");
   playing.value = !playing.value;
+}
+
+type InjectedFunction = (tag: string) => void;
+const injectedTagClick = inject("handleTagClick", null) as InjectedFunction | null;
+function handleTagClick(tag: string) {
+  if (injectedTagClick) {
+    injectedTagClick(tag);
+  } else {
+    useRouter().push({ path: "/sounds", query: { t: tag } });
+  }
 }
 
 function formatTime(seconds: number) {

@@ -6,8 +6,8 @@
         class="col"
         clearable
         :disable="tagsArePending"
-        debounce="200"
-        label="Filter by name"
+        debounce="250"
+        label="Search"
         outlined
         style="min-width: 250px"
       />
@@ -65,6 +65,11 @@ if (routeQueries.t) {
 }
 watch([searchField, tagsFilterString], (newValues) => {
   useRouter().push({ query: { s: newValues[0] || undefined, t: newValues[1] } });
+});
+
+// listening for tag clicks
+provide("handleTagClick", (tag: string) => {
+  tagsFilter.value = [tag];
 });
 
 // blurring select menu when the filter changes
