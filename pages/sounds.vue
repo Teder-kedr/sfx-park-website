@@ -1,7 +1,15 @@
 <template>
   <div class="q-pa-lg q-mx-auto" style="max-width: 800px">
     <div class="row q-gutter-sm">
-      <QInput v-model="searchField" class="col" clearable label="Filter by name" outlined />
+      <QInput
+        v-model="searchField"
+        class="col"
+        clearable
+        :disable="tagsArePending"
+        label="Filter by name"
+        outlined
+        style="min-width: 250px"
+      />
       <QSelect
         v-model="tagsFilter"
         class="col"
@@ -11,6 +19,8 @@
         :disable="tagsArePending"
         label="Filter by tags"
         outlined
+        behavior="menu"
+        style="min-width: 250px"
       />
     </div>
     <SoundList v-if="!soundsArePending" :items="sounds" class="q-mt-lg" />
@@ -20,6 +30,8 @@
 
 <script lang="ts" setup>
 import { Sound } from "~/utils/types";
+
+// declaring refs
 const searchField = ref("");
 const tagsFilter: Ref<string[]> = ref([]);
 const tagsFilterString = computed(() => {
@@ -27,6 +39,7 @@ const tagsFilterString = computed(() => {
   return tagsFilter.value.join("|");
 });
 
+// fetching data
 const { pending: tagsArePending, data: tagsOptions } = await useLazyFetch("/api/tags");
 const { pending: soundsArePending, data: soundsData } = await useLazyFetch("/api/sounds", {
   params: {
@@ -37,6 +50,19 @@ const { pending: soundsArePending, data: soundsData } = await useLazyFetch("/api
 });
 const sounds: Ref<Sound[] | null> = soundsData;
 
+// getting and updating route params
+const routeQueries = useRoute().query;
+if (routeQueries.s) {
+  searchField.value = routeQueries.s.toString();
+}
+if (routeQueries.t) {
+  tagsFilter.value = routeQueries.t.toString().split("|");
+}
+watch([searchField, tagsFilterString], (newValues) => {
+  useRouter().push({ query: { s: newValues[0] || undefined, t: newValues[1] } });
+});
+
+// setting layout
 definePageMeta({
   layout: "nosearchbar",
 });
