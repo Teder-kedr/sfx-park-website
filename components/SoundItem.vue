@@ -26,7 +26,7 @@
         <ul v-if="props.isActive">
           <p class="q-mb-xs">Tags:</p>
           <li v-for="tag of props.item.tags" :key="tag" style="display: inline">
-            <QChip outline icon="label" clickable @click="handleTagClick(tag)">{{ tag }}</QChip>
+            <QChip outline icon="label" clickable>{{ tag }}</QChip>
           </li>
         </ul>
 
@@ -62,7 +62,7 @@ onUpdated(() => {
   }
 });
 
-const emit = defineEmits(["activate", "tagClicked"]);
+const emit = defineEmits(["activate"]);
 
 const refWaveSurfer = ref(null);
 const playing = ref(false);
@@ -72,12 +72,6 @@ const time = ref(0);
 function togglePlay() {
   emit("activate");
   playing.value = !playing.value;
-}
-
-function handleTagClick(tag: string) {
-  const router = useRouter();
-  emit("tagClicked", tag);
-  router.push(`/sounds?t=${tag}`);
 }
 
 function formatTime(seconds: number) {

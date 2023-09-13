@@ -7,13 +7,6 @@
             <em>SFX Park</em>
           </NuxtLink>
         </template>
-        <form style="flex-grow: 1; max-width: 650px" @submit.prevent>
-          <QInput v-model="searchField" class="q-ml-sm q-mb-xs" dark outlined dense label="Search sounds...">
-            <template #append>
-              <QBtn type="submit" round flat icon="search" @click="handleSearchSubmit" />
-            </template>
-          </QInput>
-        </form>
         <QBtn flat to="/">Log in / Register</QBtn>
       </QExpansionItem>
 
@@ -21,13 +14,6 @@
         <NuxtLink to="/" class="text-h6 text-white" style="text-decoration: none">
           <em>SFX Park</em>
         </NuxtLink>
-        <form style="flex-grow: 1; max-width: 650px" @submit.prevent>
-          <QInput v-model="searchField" class="q-ml-sm" dark outlined dense label="Search sounds...">
-            <template #append>
-              <QBtn type="submit" round flat icon="search" @click="handleSearchSubmit" />
-            </template>
-          </QInput>
-        </form>
         <QBtn flat to="/">Log in / Register</QBtn>
       </QToolbar>
     </div>
@@ -40,16 +26,6 @@
     </footer>
   </div>
 </template>
-
-<script setup lang="ts">
-const searchField = ref("");
-
-function handleSearchSubmit() {
-  const router = useRouter();
-  router.push(`/sounds?s=${searchField.value.toLowerCase()}`);
-  searchField.value = "";
-}
-</script>
 
 <style scoped>
 .my-body {

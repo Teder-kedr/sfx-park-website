@@ -1,12 +1,11 @@
 <template>
-  <ul v-if="props.items.length">
+  <ul v-if="props.items && props.items.length">
     <SoundItem
       v-for="item in props.items"
       :key="item.id"
       :item="item"
       :is-active="activeItemId === item.id"
       @activate="handleActivate(item)"
-      @tag-clicked="emit('tagClicked', $event)"
     />
   </ul>
   <p v-else class="text-center text-grey-7">No sounds</p>
@@ -15,14 +14,11 @@
 <script lang="ts" setup>
 import { Sound } from "~/utils/types";
 
-const props = defineProps({
-  items: {
-    default: [],
-    type: Array<Sound>,
-  },
-});
+type Props = {
+  items: Array<Sound> | null;
+};
 
-const emit = defineEmits(["tagClicked"]);
+const props = defineProps<Props>();
 
 const activeItemId = ref("");
 
