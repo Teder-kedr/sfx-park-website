@@ -6,6 +6,7 @@
         class="col"
         clearable
         :disable="tagsArePending"
+        debounce="200"
         label="Filter by name"
         outlined
         style="min-width: 250px"

@@ -21,17 +21,26 @@ export default defineEventHandler(async (event) => {
 
     const result = await prisma.sounds.findMany({
       where: {
-        title: searchField
-          ? {
-              contains: searchField,
-              mode: "insensitive",
-            }
-          : undefined,
-        tags: tags
-          ? {
+        OR: !searchField
+          ? undefined
+          : [
+              {
+                title: {
+                  contains: searchField,
+                  mode: "insensitive",
+                },
+              },
+              {
+                tags: {
+                  has: searchField.toLowerCase(),
+                },
+              },
+            ],
+        tags: !tags
+          ? undefined
+          : {
               hasEvery: tags,
-            }
-          : undefined,
+            },
       },
     });
     return result;
