@@ -3,7 +3,9 @@
   <div class="my-container q-mx-auto q-px-lg">
     <h3 class="text-h6">Popular sounds:</h3>
     <SoundList v-if="!pending" :items="sounds" />
-    <p v-else class="text-center text-grey-7 q-mt-lg">Loading...</p>
+    <div v-else class="q-my-lg row justify-center">
+      <QSpinnerIos size="2rem" />
+    </div>
     <div class="row justify-center">
       <QBtn flat rounded class="text-grey-9" to="/sounds">
         <QIcon name="add" class="q-mr-xs" />

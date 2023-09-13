@@ -25,7 +25,9 @@
       />
     </div>
     <SoundList v-if="!soundsArePending" :items="sounds" class="q-mt-lg" />
-    <p v-else class="text-center text-grey-7 q-mt-lg">Loading...</p>
+    <div v-else class="q-mt-lg row justify-center">
+      <QSpinnerIos size="2rem" />
+    </div>
   </div>
 </template>
 
