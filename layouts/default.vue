@@ -35,8 +35,14 @@
     <div>
       <slot />
     </div>
-    <footer class="my-footer text-grey-4 bg-dark q-pa-lg">
-      <p class="text-center q-mb-none"></p>
+    <footer class="my-footer text-grey-4 text-center bg-dark q-pa-lg">
+      <p class="q-mb-none">© Alexander Teder</p>
+      <p class="q-mb-none">
+        Visit my GitHub page:
+        <a href="https://github.com/teder-kedr" target="_blank" rel="noopener noreferrer">
+          https://github.com/teder-kedr
+        </a>
+      </p>
     </footer>
   </div>
 </template>
@@ -62,5 +68,9 @@ function handleSearchSubmit() {
 .my-big-toolbar {
   flex-direction: row;
   gap: 2rem;
+}
+a,
+a:visited {
+  color: inherit;
 }
 </style>
