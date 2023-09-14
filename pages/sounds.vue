@@ -29,11 +29,16 @@
     <div v-else class="q-mt-lg row justify-center">
       <QSpinnerIos size="2rem" />
     </div>
+    <div v-if="!searchField && !tagsFilterString" class="q-mt-lg q-mb-sm row justify-center">
+      <QPagination v-model="page" direction-links :max="MAX_PAGES" />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { Sound } from "~/utils/types";
+
+const MAX_PAGES = 2;
 
 // declaring refs
 const searchField = ref("");
@@ -42,6 +47,13 @@ const tagsFilterString = computed(() => {
   if (!tagsFilter.value?.length) return undefined;
   return tagsFilter.value.join("|");
 });
+const page: Ref<number> = ref(1);
+
+// resetting page when filters change
+watch([searchField, tagsFilterString], () => {
+  page.value = 1;
+});
+
 const selectRef: Ref<HTMLElement | null> = ref(null);
 
 // fetching data
@@ -50,8 +62,9 @@ const { pending: soundsArePending, data: soundsData } = await useLazyFetch("/api
   params: {
     s: searchField,
     t: tagsFilterString,
+    p: page,
   },
-  watch: [searchField, tagsFilterString],
+  watch: [searchField, tagsFilterString, page],
 });
 const sounds: Ref<Sound[] | null> = soundsData;
 
@@ -63,8 +76,17 @@ if (routeQueries.s) {
 if (routeQueries.t) {
   tagsFilter.value = routeQueries.t.toString().split("|");
 }
-watch([searchField, tagsFilterString], (newValues) => {
-  useRouter().push({ query: { s: newValues[0] || undefined, t: newValues[1] } });
+if (routeQueries.p) {
+  page.value = parseInt(routeQueries.p.toString());
+}
+watch([searchField, tagsFilterString, page], (newValues) => {
+  useRouter().push({
+    query: {
+      s: newValues[0] || undefined,
+      t: newValues[1],
+      p: newValues[2] > 1 ? newValues[2] : undefined,
+    },
+  });
 });
 
 // listening for tag clicks

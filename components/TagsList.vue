@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-const { data } = await useLazyFetch("tags.json");
+const { data } = await useLazyFetch("/tags.json");
 const tags = data as Ref<string[]>;
 </script>
 

@@ -16,8 +16,11 @@ export default defineEventHandler(async (event) => {
       return popularSounds;
     }
 
+    const ITEMS_PER_PAGE = 8;
+
     const searchField = query.s?.toString();
     const tags = query.t?.toString().split("|");
+    const pageQuery = query.p;
 
     const result = await prisma.sounds.findMany({
       where: {
@@ -42,7 +45,10 @@ export default defineEventHandler(async (event) => {
               hasEvery: tags,
             },
       },
+      take: ITEMS_PER_PAGE,
+      skip: !pageQuery ? undefined : (parseInt(pageQuery.toString()) - 1) * ITEMS_PER_PAGE,
     });
+
     return result;
   } catch (error) {
     console.error(error);
