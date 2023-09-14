@@ -7,14 +7,14 @@
             <em>SFX Park</em>
           </NuxtLink>
         </template>
-        <QBtn flat to="/">Log in / Register</QBtn>
+        <QBtn flat to="login">Log in / Register</QBtn>
       </QExpansionItem>
 
       <QToolbar v-else class="my-big-toolbar bg-dark text-white q-py-md q-px-lg justify-between">
         <NuxtLink to="/" class="text-h6 text-white" style="text-decoration: none">
           <em>SFX Park</em>
         </NuxtLink>
-        <QBtn flat to="/">Log in / Register</QBtn>
+        <QBtn flat to="login">Log in / Register</QBtn>
       </QToolbar>
     </div>
 

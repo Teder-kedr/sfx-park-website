@@ -14,7 +14,7 @@
             </template>
           </QInput>
         </form>
-        <QBtn flat to="/">Log in / Register</QBtn>
+        <QBtn flat to="login">Log in / Register</QBtn>
       </QExpansionItem>
 
       <QToolbar v-else class="my-big-toolbar bg-dark text-white q-py-md q-px-lg justify-between">
@@ -28,7 +28,7 @@
             </template>
           </QInput>
         </form>
-        <QBtn flat to="/">Log in / Register</QBtn>
+        <QBtn flat to="login">Log in / Register</QBtn>
       </QToolbar>
     </div>
 

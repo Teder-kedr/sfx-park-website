@@ -35,8 +35,8 @@
         </p>
       </div>
       <div class="row no-wrap items-center" style="gap: 0.5rem">
-        <QBtn round flat aria-label="Add to favorites" icon="star_outline" />
-        <QBtn round flat aria-label="Download" icon="file_download" />
+        <QBtn to="/login" round flat aria-label="Add to favorites" icon="star_outline" />
+        <QBtn to="/login" round flat aria-label="Download" icon="file_download" />
       </div>
     </QCard>
   </li>

@@ -4,7 +4,7 @@
       <div class="q-px-lg q-py-xl q-mx-auto" style="width: min(800px, 100%)">
         <h1 class="text-h3 q-pb-md q-my-none text-weight-bold">Explore our library and find the perfect sound!</h1>
         <p class="text-h6 text-weight-regular">Become a community member to download your favorite sounds.</p>
-        <QBtn rounded color="primary">Register</QBtn>
+        <QBtn to="login" rounded color="primary">Register</QBtn>
       </div>
     </div>
   </section>
