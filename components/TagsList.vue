@@ -1,5 +1,5 @@
 <template>
-  <div class="q-mb-xl">
+  <div v-if="tags" class="q-mb-xl">
     <QChip
       v-for="tag of tags"
       :key="tag"
@@ -9,7 +9,7 @@
       class="q-px-md q-mb-sm"
       style="font-size: 1rem"
       clickable
-      @click="$router.push('/sounds')"
+      @click="$router.push({ path: '/sounds', query: { t: tag.toLowerCase() } })"
     >
       {{ tag }}
     </QChip>
@@ -17,12 +17,8 @@
 </template>
 
 <script lang="ts" setup>
-const tags: Ref<string[]> = ref([]);
-
-onMounted(async () => {
-  const response = await fetch("tags.json");
-  tags.value = await response.json();
-});
+const { data } = await useLazyFetch("tags.json");
+const tags = data as Ref<string[]>;
 </script>
 
 <style></style>
