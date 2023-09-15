@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["nuxt-quasar-ui"],
+  modules: ["nuxt-quasar-ui", "@nuxtjs/supabase"],
   quasar: {
     config: {
       ripple: false,
@@ -10,6 +10,6 @@ export default defineNuxtConfig({
       },
     },
   },
-  devtools: { enabled: true },
+  supabase: { redirect: false },
   typescript: { strict: true },
 });
