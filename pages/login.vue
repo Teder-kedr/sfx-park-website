@@ -32,6 +32,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useMyUserStore } from "~/stores/user";
+
 const logInEmailField = ref("");
 const logInPasswordField = ref("");
 const signUpEmailField = ref("");
@@ -40,32 +42,54 @@ const signUpPasswordField = ref("");
 const client = useSupabaseClient();
 
 async function handleLogIn() {
-  const { data, error } = await client.auth.signInWithPassword({
+  const { data: authData, error: authError } = await client.auth.signInWithPassword({
     email: logInEmailField.value,
     password: logInPasswordField.value,
   });
-  console.log("data: ", data);
-  console.log("error: ", error);
+  if (authData.user) {
+    const { data, error: apiError } = await useFetch("/api/users", {
+      method: "get",
+      query: {
+        id: authData.user.id,
+      },
+    });
+    if (data.value) {
+      const store = useMyUserStore();
+      store.user = data.value;
+      console.log("store: ", store.user);
+    }
+  }
 }
 
 async function handleSignUp() {
-  const { data, error } = await client.auth.signUp({
+  const { data: authData, error: authError } = await client.auth.signUp({
     email: signUpEmailField.value,
     password: signUpPasswordField.value,
   });
-  console.log("data: ", data);
-  console.log("error: ", error);
+  if (authData.user) {
+    const { data, error: apiError } = await useFetch("/api/users", {
+      method: "post",
+      body: { id: authData.user.id, email: authData.user.email },
+    });
+    if (data.value) {
+      const store = useMyUserStore();
+      store.user = data.value.user;
+      console.log("store: ", store.user);
+    }
+  }
 }
 
 async function handleLogOut() {
   const { error } = await client.auth.signOut();
+  const store = useMyUserStore();
+  store.user = null;
   console.log("SIGNED OUT");
   console.log("error: ", error);
 }
 
 onMounted(() => {
   const user = useSupabaseUser();
-  console.log(user.value);
+  console.log("user: ", user.value);
 });
 </script>
 

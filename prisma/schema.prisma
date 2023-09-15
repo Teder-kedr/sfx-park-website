@@ -16,3 +16,9 @@ model sounds {
   title    String
   views    Int
 }
+
+model users {
+  id    String   @id @map("_id")
+  email String
+  liked String[]
+}
