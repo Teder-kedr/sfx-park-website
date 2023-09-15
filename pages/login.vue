@@ -47,15 +47,15 @@ async function handleLogIn() {
     password: logInPasswordField.value,
   });
   if (authData.user) {
-    const { data, error: apiError } = await useFetch("/api/users", {
+    const { data: apiData, error: apiError } = await useFetch("/api/users", {
       method: "get",
       query: {
         id: authData.user.id,
       },
     });
-    if (data.value) {
+    if (apiData.value) {
       const store = useMyUserStore();
-      store.user = data.value;
+      store.user = apiData.value;
       console.log("store: ", store.user);
     }
   }
@@ -67,13 +67,13 @@ async function handleSignUp() {
     password: signUpPasswordField.value,
   });
   if (authData.user) {
-    const { data, error: apiError } = await useFetch("/api/users", {
+    const { data: apiData, error: apiError } = await useFetch("/api/users", {
       method: "post",
       body: { id: authData.user.id, email: authData.user.email },
     });
-    if (data.value) {
+    if (apiData.value) {
       const store = useMyUserStore();
-      store.user = data.value.user;
+      store.user = apiData.value.user;
       console.log("store: ", store.user);
     }
   }
@@ -85,11 +85,12 @@ async function handleLogOut() {
   store.user = null;
   console.log("SIGNED OUT");
   console.log("error: ", error);
+  console.log("store: ", store.user);
 }
 
 onMounted(() => {
   const user = useSupabaseUser();
-  console.log("user: ", user.value);
+  console.log("supabase user: ", user.value);
 });
 </script>
 
