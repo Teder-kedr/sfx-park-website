@@ -67,13 +67,15 @@ const tagsFilterString = computed(() => {
 });
 const page: Ref<number> = ref(1);
 const sortBy: Ref<string> = ref("popular");
+const sortByApiParam: ComputedRef<string | undefined> = computed(() => {
+  if (sortBy.value === "popular") return;
+  return sortBy.value;
+});
 
 // resetting page when filters change
 watch([searchField, tagsFilterString], () => {
   page.value = 1;
 });
-
-const selectRef: Ref<HTMLElement | null> = ref(null);
 
 // fetching data
 const { pending: tagsArePending, data: tagsOptions } = await useLazyFetch("/api/tags");
@@ -82,7 +84,7 @@ const { pending: soundsArePending, data: soundsData } = await useLazyFetch("/api
     s: searchField,
     t: tagsFilterString,
     p: page,
-    sort: sortBy,
+    sort: sortByApiParam,
   },
   watch: [searchField, tagsFilterString, page, sortBy],
 });
@@ -118,7 +120,8 @@ provide("handleTagClick", (tag: string) => {
   tagsFilter.value = [tag];
 });
 
-// blurring select menu when the filter changes
+// blurring select menu when the tag filter changes
+const selectRef: Ref<HTMLElement | null> = ref(null);
 watch(tagsFilter, () => {
   selectRef.value?.blur();
 });

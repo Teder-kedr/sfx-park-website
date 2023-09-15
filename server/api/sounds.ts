@@ -23,6 +23,15 @@ export default defineEventHandler(async (event) => {
     const pageQuery = query.p;
     const sortByQuery = query.sort?.toString();
 
+    let lengthOrder: "desc" | "asc" | undefined;
+    if (sortByQuery === "shortest") {
+      lengthOrder = "asc";
+    } else if (sortByQuery === "longest") {
+      lengthOrder = "desc";
+    }
+
+    const viewsOrder: "desc" | undefined = lengthOrder ? undefined : "desc";
+
     const result = await prisma.sounds.findMany({
       where: {
         OR: !searchField
@@ -47,8 +56,8 @@ export default defineEventHandler(async (event) => {
             },
       },
       orderBy: {
-        views: !sortByQuery ? "desc" : undefined,
-        duration: sortByQuery === "shortest" ? "asc" : "desc",
+        views: viewsOrder,
+        duration: lengthOrder,
       },
       take: ITEMS_PER_PAGE,
       skip: !pageQuery ? undefined : (parseInt(pageQuery.toString()) - 1) * ITEMS_PER_PAGE,
