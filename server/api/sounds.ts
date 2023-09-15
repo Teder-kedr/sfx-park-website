@@ -21,6 +21,7 @@ export default defineEventHandler(async (event) => {
     const searchField = query.s?.toString();
     const tags = query.t?.toString().split("|");
     const pageQuery = query.p;
+    const sortByQuery = query.sort?.toString();
 
     const result = await prisma.sounds.findMany({
       where: {
@@ -44,6 +45,10 @@ export default defineEventHandler(async (event) => {
           : {
               hasEvery: tags,
             },
+      },
+      orderBy: {
+        views: !sortByQuery ? "desc" : undefined,
+        duration: sortByQuery === "shortest" ? "asc" : "desc",
       },
       take: ITEMS_PER_PAGE,
       skip: !pageQuery ? undefined : (parseInt(pageQuery.toString()) - 1) * ITEMS_PER_PAGE,
