@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "build": "npx prisma generate && nuxt build",
     "dev": "nuxt dev",
     "host": "nuxt dev --host 0.0.0.0 --port 8000",
     "generate": "nuxt generate",
