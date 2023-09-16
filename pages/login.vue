@@ -7,14 +7,14 @@
       <div class="row justify-center">
         <QBtn :loading="logInLoading" type="submit" color="primary" class="q-mt-md" @click="handleLogIn"> Log in </QBtn>
       </div>
+      <QCard v-if="logInError" class="q-pa-lg q-my-md text-red text-center" flat bordered>
+        Error: {{ logInError }}
+      </QCard>
     </form>
-    <QCard v-if="logInError" class="q-pa-lg q-my-md text-red text-center" flat bordered>
-      Error: {{ logInError }}
-    </QCard>
     <QSeparator class="q-my-lg" />
     <p class="text-center">or</p>
     <h2 class="text-h5 text-center">Sign up</h2>
-    <form class="q-pb-xs" @submit.prevent>
+    <form class="q-pb-lg" @submit.prevent>
       <QInput v-model="signUpEmailField" filled bg-color="white" type="email" label="Email" />
       <QInput
         v-model="signUpPasswordField"
@@ -29,13 +29,10 @@
           Sign up
         </QBtn>
       </div>
+      <QCard v-if="signUpError" class="q-pa-lg q-mt-md text-red text-center" flat bordered>
+        Error: {{ signUpError }}
+      </QCard>
     </form>
-    <QCard v-if="signUpError" class="q-pa-lg q-my-md text-red text-center" flat bordered>
-      Error: {{ signUpError }}
-    </QCard>
-    <div class="row justify-center">
-      <QBtn type="submit" color="dark" class="q-mt-md" @click="handleLogOut">Log out</QBtn>
-    </div>
   </div>
 </template>
 
@@ -114,15 +111,6 @@ async function handleSignUp() {
       signUpError.value = error.message;
     }
   }
-}
-
-async function handleLogOut() {
-  const { error } = await client.auth.signOut();
-  const store = useMyUserStore();
-  store.user = null;
-  console.log("SIGNED OUT");
-  console.log("error: ", error);
-  console.log("store: ", store.user);
 }
 </script>
 
