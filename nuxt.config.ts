@@ -12,7 +12,4 @@ export default defineNuxtConfig({
   },
   supabase: { redirect: false },
   typescript: { strict: true },
-  nitro: {
-    preset: "netlify",
-  },
 });
