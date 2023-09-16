@@ -1,6 +1,6 @@
 <template>
   <div>
-    <QBtn v-if="isUser" flat to="/login">My account</QBtn>
+    <QBtn v-if="isUser" flat to="/account">My account</QBtn>
     <QBtn v-else flat to="/login">Log in / Register</QBtn>
   </div>
 </template>

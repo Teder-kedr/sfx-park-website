@@ -14,7 +14,7 @@
     <QSeparator class="q-my-lg" />
     <p class="text-center">or</p>
     <h2 class="text-h5 text-center">Sign up</h2>
-    <form class="q-pb-lg" @submit.prevent>
+    <form class="q-pb-xs" @submit.prevent>
       <QInput v-model="signUpEmailField" filled bg-color="white" type="email" label="Email" />
       <QInput
         v-model="signUpPasswordField"

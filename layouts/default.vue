@@ -1,7 +1,12 @@
 <template>
   <div class="my-body">
     <div>
-      <QExpansionItem v-if="$q.screen.xs" expand-icon-toggle class="bg-dark text-white q-py-md q-px-lg justify-between">
+      <QExpansionItem
+        v-if="$q.screen.xs"
+        ref="panel"
+        expand-icon-toggle
+        class="bg-dark text-white q-py-md q-px-lg justify-between"
+      >
         <template #header>
           <NuxtLink to="/" class="text-h6 text-white q-mr-sm" style="text-decoration: none">
             <em>SFX Park</em>
@@ -14,7 +19,7 @@
             </template>
           </QInput>
         </form>
-        <DynamicHeaderButton />
+        <DynamicHeaderButton @click="handleHidePanel" />
       </QExpansionItem>
 
       <QToolbar v-else class="my-big-toolbar bg-dark text-white q-py-md q-px-lg justify-between">
@@ -48,6 +53,18 @@
 </template>
 
 <script setup lang="ts">
+interface PanelRef {
+  hide: () => void;
+}
+
+const panel: Ref<PanelRef | null> = ref(null);
+
+function handleHidePanel() {
+  if (panel.value) {
+    panel.value.hide();
+  }
+}
+
 const searchField = ref("");
 
 function handleSearchSubmit() {
