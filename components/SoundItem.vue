@@ -8,6 +8,7 @@
         :icon="playing ? 'pause' : 'play_arrow'"
         :aria-label="playing ? 'Pause' : 'Play'"
         @click="togglePlay"
+        @click.once="incrementViewsCount"
       />
       <div style="width: 100%">
         <WaveSurfer
@@ -22,6 +23,11 @@
           {{ formatTime(time) }} / {{ formatTime(duration) }}
         </p>
         <button class="my-title text-subtitle1 q-mb-none" @click="$emit('activate')">{{ props.item.title }}</button>
+
+        <p v-if="props.isActive" class="q-mb-none text-grey-7">
+          <QIcon name="headphones" />
+          {{ props.item.views }}
+        </p>
 
         <ul v-if="props.isActive">
           <p class="q-mb-xs">Tags:</p>
@@ -142,6 +148,14 @@ async function updateFavorites(array: string[]) {
   });
   if (error.value) throw error.value;
   return data.value?.success;
+}
+
+async function incrementViewsCount() {
+  const { error } = await useFetch("/api/view", {
+    method: "post",
+    body: { id: props.item.id },
+  });
+  if (error.value) console.error(error.value);
 }
 
 function formatTime(seconds: number) {
