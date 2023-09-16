@@ -73,7 +73,7 @@ const sortByApiParam: ComputedRef<string | undefined> = computed(() => {
 });
 
 // resetting page when filters change
-watch([searchField, tagsFilterString], () => {
+watch([searchField, tagsFilterString, sortBy], () => {
   page.value = 1;
 });
 

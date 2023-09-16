@@ -3,10 +3,7 @@ import { useMyUserStore } from "~/stores/user";
 export default defineNuxtRouteMiddleware(async () => {
   const supabaseUser = useSupabaseUser();
   const store = useMyUserStore();
-  if (!supabaseUser.value) {
-    console.log("no user");
-    return;
-  }
+  if (!supabaseUser.value) return;
 
   if (!store.user || supabaseUser.value.id !== store.user.id) {
     const { data: apiData } = await useFetch("/api/users", {
@@ -17,7 +14,6 @@ export default defineNuxtRouteMiddleware(async () => {
     });
     if (apiData.value) {
       store.user = apiData.value;
-      console.log("logged in as: ", store.user);
     }
   }
 });
