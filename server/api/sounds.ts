@@ -16,6 +16,19 @@ export default defineEventHandler(async (event) => {
       return popularSounds;
     }
 
+    if (query.fav) {
+      const ids = query.ids?.toString().split("|");
+
+      const favoriteSounds = await prisma.sounds.findMany({
+        where: {
+          id: {
+            in: ids,
+          },
+        },
+      });
+      return favoriteSounds;
+    }
+
     const ITEMS_PER_PAGE = 8;
 
     const searchField = query.s?.toString();
@@ -23,14 +36,14 @@ export default defineEventHandler(async (event) => {
     const pageQuery = query.p;
     const sortByQuery = query.sort?.toString();
 
-    let lengthOrder: "desc" | "asc" | undefined;
+    let duration: "desc" | "asc" | undefined;
     if (sortByQuery === "shortest") {
-      lengthOrder = "asc";
+      duration = "asc";
     } else if (sortByQuery === "longest") {
-      lengthOrder = "desc";
+      duration = "desc";
     }
 
-    const viewsOrder: "desc" | undefined = lengthOrder ? undefined : "desc";
+    const views: "desc" | undefined = duration ? undefined : "desc";
 
     const result = await prisma.sounds.findMany({
       where: {
@@ -56,8 +69,8 @@ export default defineEventHandler(async (event) => {
             },
       },
       orderBy: {
-        views: viewsOrder,
-        duration: lengthOrder,
+        views,
+        duration,
       },
       take: ITEMS_PER_PAGE,
       skip: !pageQuery ? undefined : (parseInt(pageQuery.toString()) - 1) * ITEMS_PER_PAGE,

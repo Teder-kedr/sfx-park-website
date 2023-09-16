@@ -33,10 +33,25 @@
         <p class="q-mb-none">
           <span v-if="!isActive" class="text-caption text-grey-7">{{ formatTime(props.item.duration) }}</span>
         </p>
+        <Transition name="slide-fade">
+          <div v-if="isPopupText">
+            <QChip color="yellow-9" outline class="q-mb-none q-pt-sm">
+              Added to my favorites!
+              <QIcon name="check" class="q-ml-sm" />
+            </QChip>
+          </div>
+        </Transition>
       </div>
       <div class="row no-wrap items-center" style="gap: 0.5rem">
-        <QBtn to="/login" round flat aria-label="Add to favorites" icon="star_outline" />
-        <QBtn to="/login" round flat aria-label="Download" icon="file_download" />
+        <QBtn
+          round
+          flat
+          aria-label="Add to favorites"
+          :icon="isFav ? 'star' : 'star_outline'"
+          :color="isFav ? 'warning' : undefined"
+          @click="handleFavClick"
+        />
+        <QBtn round flat aria-label="Download" icon="file_download" />
       </div>
     </QCard>
   </li>
@@ -44,6 +59,7 @@
 <script setup lang="ts">
 import { Sound } from "~/utils/types";
 import type { PropType } from "vue";
+import { useMyUserStore } from "~/stores/user";
 
 const props = defineProps({
   item: {
@@ -84,6 +100,29 @@ function handleTagClick(tag: string) {
   }
 }
 
+const store = useMyUserStore();
+const isFav = ref(store.user?.liked.includes(props.item.id) || false);
+const isPopupText = ref(false);
+
+function handleFavClick() {
+  const POPUP_TIMEOUT = 3000;
+
+  if (!store.user) {
+    const router = useRouter();
+    router.push("/login");
+  } else {
+    isFav.value = !isFav.value;
+    if (isFav.value) {
+      isPopupText.value = true;
+      setTimeout(() => {
+        isPopupText.value = false;
+      }, POPUP_TIMEOUT);
+    } else {
+      isPopupText.value = false;
+    }
+  }
+}
+
 function formatTime(seconds: number) {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
@@ -97,6 +136,19 @@ function formatSrc(fileName: string) {
 </script>
 
 <style scoped>
+.slide-fade-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
 .my-title {
   text-align: left;
   background: none;
