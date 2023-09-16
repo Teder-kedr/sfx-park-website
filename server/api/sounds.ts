@@ -3,16 +3,23 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
+  console.log("hello from event handler");
+
   const query = getQuery(event);
+
+  console.log("query: ", query);
 
   try {
     if (query.homepage === "true") {
+      console.log("homepage!");
       const popularSounds = await prisma.sounds.findMany({
         orderBy: {
           views: "desc",
         },
         take: 4,
       });
+      console.log("result: ", popularSounds);
+
       return popularSounds;
     }
 
