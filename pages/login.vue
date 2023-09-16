@@ -5,9 +5,12 @@
       <QInput v-model="logInEmailField" filled bg-color="white" type="email" label="Email" />
       <QInput v-model="logInPasswordField" filled bg-color="white" type="password" label="Password" class="q-mt-sm" />
       <div class="row justify-center">
-        <QBtn type="submit" color="primary" class="q-mt-md" @click="handleLogIn">Log in</QBtn>
+        <QBtn :loading="logInLoading" type="submit" color="primary" class="q-mt-md" @click="handleLogIn"> Log in </QBtn>
       </div>
     </form>
+    <QCard v-if="logInError" class="q-pa-lg q-my-md text-red text-center" flat bordered>
+      Error: {{ logInError }}
+    </QCard>
     <QSeparator class="q-my-lg" />
     <p class="text-center">or</p>
     <h2 class="text-h5 text-center">Sign up</h2>
@@ -22,9 +25,14 @@
         class="q-mt-sm"
       />
       <div class="row justify-center">
-        <QBtn type="submit" color="primary" class="q-mt-md" @click="handleSignUp">Sign up</QBtn>
+        <QBtn :loading="signUpLoading" type="submit" color="primary" class="q-mt-md" @click="handleSignUp">
+          Sign up
+        </QBtn>
       </div>
     </form>
+    <QCard v-if="signUpError" class="q-pa-lg q-my-md text-red text-center" flat bordered>
+      Error: {{ signUpError }}
+    </QCard>
     <div class="row justify-center">
       <QBtn type="submit" color="dark" class="q-mt-md" @click="handleLogOut">Log out</QBtn>
     </div>
@@ -39,42 +47,71 @@ const logInPasswordField = ref("");
 const signUpEmailField = ref("");
 const signUpPasswordField = ref("");
 
+const logInLoading = ref(false);
+const signUpLoading = ref(false);
+const logInError = ref("");
+const signUpError = ref("");
+
 const client = useSupabaseClient();
 
 async function handleLogIn() {
-  const { data: authData, error: authError } = await client.auth.signInWithPassword({
-    email: logInEmailField.value,
-    password: logInPasswordField.value,
-  });
-  if (authData.user) {
-    const { data: apiData, error: apiError } = await useFetch("/api/users", {
-      method: "get",
-      query: {
-        id: authData.user.id,
-      },
+  logInLoading.value = true;
+  try {
+    const { data: authData, error: authError } = await client.auth.signInWithPassword({
+      email: logInEmailField.value,
+      password: logInPasswordField.value,
     });
-    if (apiData.value) {
-      const store = useMyUserStore();
-      store.user = apiData.value;
-      console.log("store: ", store.user);
+    if (authError) throw authError;
+    if (authData.user) {
+      const { data: apiData, error: apiError } = await useFetch("/api/users", {
+        method: "get",
+        query: {
+          id: authData.user.id,
+        },
+      });
+      if (apiError.value) throw apiError.value;
+      if (apiData.value) {
+        const store = useMyUserStore();
+        store.user = apiData.value;
+      }
+    }
+    const router = useRouter();
+    router.push("/");
+  } catch (error) {
+    logInLoading.value = false;
+    console.error(error);
+    if (error instanceof Error) {
+      logInError.value = error.message;
     }
   }
 }
 
 async function handleSignUp() {
-  const { data: authData, error: authError } = await client.auth.signUp({
-    email: signUpEmailField.value,
-    password: signUpPasswordField.value,
-  });
-  if (authData.user) {
-    const { data: apiData, error: apiError } = await useFetch("/api/users", {
-      method: "post",
-      body: { id: authData.user.id, email: authData.user.email },
+  signUpLoading.value = true;
+  try {
+    const { data: authData, error: authError } = await client.auth.signUp({
+      email: signUpEmailField.value,
+      password: signUpPasswordField.value,
     });
-    if (apiData.value) {
-      const store = useMyUserStore();
-      store.user = apiData.value.user;
-      console.log("store: ", store.user);
+    if (authError) throw authError;
+    if (authData.user) {
+      const { data: apiData, error: apiError } = await useFetch("/api/users", {
+        method: "post",
+        body: { id: authData.user.id, email: authData.user.email },
+      });
+      if (apiError.value) throw apiError.value;
+      if (apiData.value) {
+        const store = useMyUserStore();
+        store.user = apiData.value.user;
+      }
+    }
+    const router = useRouter();
+    router.push("/");
+  } catch (error) {
+    signUpLoading.value = false;
+    console.error(error);
+    if (error instanceof Error) {
+      signUpError.value = error.message;
     }
   }
 }
@@ -87,11 +124,6 @@ async function handleLogOut() {
   console.log("error: ", error);
   console.log("store: ", store.user);
 }
-
-onMounted(() => {
-  const user = useSupabaseUser();
-  console.log("supabase user: ", user.value);
-});
 </script>
 
 <style></style>
