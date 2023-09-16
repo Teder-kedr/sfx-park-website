@@ -1,7 +1,7 @@
 <template>
   <div class="q-px-lg q-mx-auto" style="max-width: 800px">
     <h1 class="text-h5">My favorites:</h1>
-    <SoundList v-if="!soundsArePending" :items="sounds" class="q-mt-lg" />
+    <SoundList v-if="!soundsArePending" :items="sounds" />
     <div v-else class="q-mt-lg row justify-center">
       <QSpinnerIos size="2rem" />
     </div>

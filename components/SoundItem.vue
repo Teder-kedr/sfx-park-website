@@ -47,8 +47,9 @@
           round
           flat
           aria-label="Add to favorites"
+          :loading="isLikeLoading"
           :icon="isFav ? 'star' : 'star_outline'"
-          :color="isFav ? 'warning' : undefined"
+          :color="isFav && !isLikeLoading ? 'warning' : undefined"
           @click="handleFavClick"
         />
         <QBtn round flat aria-label="Download" icon="file_download" />
@@ -103,24 +104,44 @@ function handleTagClick(tag: string) {
 const store = useMyUserStore();
 const isFav = ref(store.user?.liked.includes(props.item.id) || false);
 const isPopupText = ref(false);
+const isLikeLoading = ref(false);
 
-function handleFavClick() {
+async function handleFavClick() {
   const POPUP_TIMEOUT = 3000;
 
   if (!store.user) {
     const router = useRouter();
     router.push("/login");
   } else {
-    isFav.value = !isFav.value;
-    if (isFav.value) {
-      isPopupText.value = true;
-      setTimeout(() => {
+    try {
+      isLikeLoading.value = true;
+      isFav.value = !isFav.value;
+      store.toogleLiked(props.item.id);
+      await updateFavorites(store.user.liked);
+      isLikeLoading.value = false;
+      if (store.user.liked.includes(props.item.id)) {
+        isPopupText.value = true;
+        setTimeout(() => {
+          isPopupText.value = false;
+        }, POPUP_TIMEOUT);
+      } else {
         isPopupText.value = false;
-      }, POPUP_TIMEOUT);
-    } else {
-      isPopupText.value = false;
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
+}
+
+async function updateFavorites(array: string[]) {
+  const likedString = array.join("|");
+  const uid = store.user?.id;
+  const { data, error } = await useFetch("/api/like", {
+    method: "post",
+    body: { liked: likedString, uid },
+  });
+  if (error.value) throw error.value;
+  return data.value?.success;
 }
 
 function formatTime(seconds: number) {

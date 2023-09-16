@@ -17,7 +17,9 @@ export default defineEventHandler(async (event) => {
     }
 
     if (query.fav) {
-      const ids = query.ids?.toString().split("|");
+      if (!query.ids) return [];
+
+      const ids = query.ids.toString().split("|");
 
       const favoriteSounds = await prisma.sounds.findMany({
         where: {
