@@ -39,6 +39,10 @@
 <script lang="ts" setup>
 import { useMyUserStore } from "~/stores/user";
 
+definePageMeta({
+  middleware: ["to-login"],
+});
+
 const logInEmailField = ref("");
 const logInPasswordField = ref("");
 const signUpEmailField = ref("");

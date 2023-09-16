@@ -19,6 +19,11 @@
 
 <script lang="ts" setup>
 import { useMyUserStore } from "~/stores/user";
+
+definePageMeta({
+  middleware: ["to-auth-only"],
+});
+
 const store = useMyUserStore();
 const client = useSupabaseClient();
 
