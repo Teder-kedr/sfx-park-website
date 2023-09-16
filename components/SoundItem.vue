@@ -58,10 +58,11 @@
           :color="isFav && !isLikeLoading ? 'warning' : undefined"
           @click="handleFavClick"
         />
-        <QBtn round flat aria-label="Download" icon="file_download" />
+        <QBtn round flat aria-label="Download" icon="file_download" @click="handleDownloadClick" />
       </div>
     </QCard>
   </li>
+  <DownloadDialog v-model="isDialogOpen" :file-name="props.item.fileName" :title="props.item.title" />
 </template>
 <script setup lang="ts">
 import { Sound } from "~/utils/types";
@@ -156,6 +157,16 @@ async function incrementViewsCount() {
     body: { id: props.item.id },
   });
   if (error.value) console.error(error.value);
+}
+
+const isDialogOpen = ref(false);
+function handleDownloadClick() {
+  if (!store.user) {
+    const router = useRouter();
+    router.push("/login");
+  } else {
+    isDialogOpen.value = true;
+  }
 }
 
 function formatTime(seconds: number) {
