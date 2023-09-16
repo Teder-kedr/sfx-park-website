@@ -39,14 +39,6 @@
         <p class="q-mb-none">
           <span v-if="!isActive" class="text-caption text-grey-7">{{ formatTime(props.item.duration) }}</span>
         </p>
-        <Transition name="slide-fade">
-          <div v-if="isPopupText">
-            <QChip color="yellow-9" outline class="q-mb-none q-pt-sm">
-              Added to my favorites!
-              <QIcon name="check" class="q-ml-sm" />
-            </QChip>
-          </div>
-        </Transition>
       </div>
       <div class="row no-wrap items-center" style="gap: 0.5rem">
         <QBtn
@@ -110,12 +102,9 @@ function handleTagClick(tag: string) {
 
 const store = useMyUserStore();
 const isFav = ref(store.user?.liked.includes(props.item.id) || false);
-const isPopupText = ref(false);
 const isLikeLoading = ref(false);
 
 async function handleFavClick() {
-  const POPUP_TIMEOUT = 3000;
-
   if (!store.user) {
     const router = useRouter();
     router.push("/login");
@@ -126,14 +115,6 @@ async function handleFavClick() {
       store.toogleLiked(props.item.id);
       await updateFavorites(store.user.liked);
       isLikeLoading.value = false;
-      if (store.user.liked.includes(props.item.id)) {
-        isPopupText.value = true;
-        setTimeout(() => {
-          isPopupText.value = false;
-        }, POPUP_TIMEOUT);
-      } else {
-        isPopupText.value = false;
-      }
     } catch (error) {
       console.error(error);
     }
