@@ -44,8 +44,8 @@
       <p class="q-mb-none">© Alexander Teder</p>
       <p class="q-mb-none">
         Visit my GitHub page:
-        <a href="https://github.com/teder-kedr" target="_blank" rel="noopener noreferrer">
-          https://github.com/teder-kedr
+        <a href="https://github.com/alex-teder" target="_blank" rel="noopener noreferrer">
+          https://github.com/alex-teder
         </a>
       </p>
     </footer>
